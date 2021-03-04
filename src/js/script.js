@@ -63,8 +63,7 @@
       thisProduct.initAccordion();
       thisProduct.initOrderForm();
       thisProduct.processOrder();
-
-      console.log('new Product', thisProduct);
+      thisProduct.initAmountWidget();
     }
     renderInMenu(){
       const thisProduct = this;
@@ -84,8 +83,8 @@
       thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
       thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
+      thisProduct.amountWidgetElem = thisProduct.element.querySelector(select.menuProduct.amountWidget);
     }
-
     initAccordion(){
       const thisProduct = this;
       const clickableTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
@@ -105,7 +104,6 @@
       });
 
     }
-
     initOrderForm(){
       const thisProduct = this;
 
@@ -125,10 +123,8 @@
         thisProduct.processOrder();
       });
 
-      console.log('orderForm', thisProduct);
     }
-
-    processOrder() {
+    processOrder(){
       const thisProduct = this;
       const formData = utils.serializeFormToObject(thisProduct.form);
 
@@ -136,7 +132,6 @@
 
       for(let paramId in thisProduct.data.params) {
         const param = thisProduct.data.params[paramId];
-        console.log(paramId, param);
 
         for(let optionId in param.options) {
           const option = param.options[optionId];
@@ -158,10 +153,48 @@
               optionImage.classList.remove(classNames.menuProduct.imageVisible);
             }
           }
-
         }
       }
       thisProduct.priceElem.innerHTML = price;
+    }
+    initAmountWidget(){
+      const thisProduct = this;
+
+      thisProduct.amountWidget = new amountWidget(thisProduct.amountWidgetElem);
+    }
+  }
+
+  class amountWidget{
+    constructor(element){
+      const thisWidget = this;
+
+      thisWidget.getElements(element);
+
+      console.log('amountWidget', thisWidget);
+      console.log('constructor argument', element);
+    }
+
+    getElements(element){
+      const thisWidget = this;
+
+      thisWidget.element = element;
+      thisWidget.input = thisWidget.element.querySelector(select.widgets.amount.input);
+      thisWidget.linkDecrease = thisWidget.element.querySelector(select.widgets.amount.linkDecrease);
+      thisWidget.linkIncrease = thisWidget.element.querySelector(select.widgets.amount.linkIncrease);
+    }
+
+    setValue(value){
+      const thisWidget = this;
+
+      const newValue = parseInt(value);
+
+      thisWidget.value = newValue;
+      thisWidget.input.value = thisWidget.value;
+      thisWidget.setValue(thisWidget.input.value);
+
+      if(thisWidget.value !== newValue && !isNaN(newValue)) {
+        thisWidget.value = newValue;
+      }
     }
   }
 
