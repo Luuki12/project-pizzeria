@@ -138,6 +138,7 @@
         event.preventDefault();
         thisProduct.processOrder();
         thisProduct.addToCart();
+
       });
     }
     processOrder(){
@@ -271,7 +272,6 @@
       thisCart.products = [];
       thisCart.getElements(element);
       thisCart.initActions();
-      console.log('new Cart', thisCart);
     }
     getElements(element){
       const thisCart = this;
@@ -299,7 +299,7 @@
       cartContainer.appendChild(generatedDOM);
       thisCart.products.push(new CartProduct(menuProduct, generatedDOM));
 
-      console.log('adding product', menuProduct);
+      thisCart.update();
     }
     update(){
       const thisCart = this;
